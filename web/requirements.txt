@@ -1,0 +1,11 @@
+#pip install -r requirements.txt
+Flask-SQLAlchemy==2.5.1
+flask_login
+pytz
+google-auth==1.27.0
+google-auth-oauthlib==0.4.2
+oauthlib==3.1.0
+pathlib==1.0.1
+vendor==0.1
+requests==2.25.1
+requests-oauthlib==1.3.0

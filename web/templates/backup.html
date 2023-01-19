@@ -1,0 +1,17 @@
+<div class="container-fluid bg-dark text-white p-2">
+  <div class="d-grid gap-2">
+    <b>Recommendation for: </b><br> 
+      {% if current_user.is_authenticated %}
+      {% for i in [0,1,2,3,4]%}
+          <a style="text-align: left;" class="btn btn-light" type="button" href={{ url_for('onclick.page', id=datas[i].id)}} > 
+          <b style="font-size: 25px;">{{datas[i].Title}}</b><br>
+          <b class="text-primary">{{datas[i].Authors}}</b><br>
+          <b>Publication Year: </b>{{datas[i].Year}} , <b>institution: </b>{{datas[i].institution}}<br>
+          <b>AuthorKeywords: </b>{{datas[i].AuthorKeywords}}
+          </a>
+      {% endfor %}
+      {% endif %}
+  </div>
+</div>
+
+<!-- {{datas[0].Title}} -->

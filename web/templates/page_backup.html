@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="p-4">
+    <div class="card">
+        <div class="card-body">
+            <b style="font-size: 30px;">{{data.Title}}</b><br>
+            <div class="text pt-3" style="font-size: 20px;">
+                <b class="text-primary">{{data.Authors}}</b><br>
+                <b>Publication Year: </b>{{data.Year}} , <b>institution: </b>{{data.institution}}<br>
+                <b>AuthorKeywords: </b>{{data.AuthorKeywords}}<br>
+                <hr>
+                <b>Abstract:</b><br>
+                {{data.Abstract}}<br>
+                <hr>
+                <div class="textfoot pt-3" style="font-size: 20px;">
+                    <b>DOI: </b>{{data.DOI}}<br>
+                    <b>Affiliations: </b>{{data.Affiliations}}<br>
+                    <b>Publisher: </b>{{data.Publisher}}<br>
+                    <b>DocumentType: </b>{{data.DocumentType}}<br>
+                    <b>Citedby: </b>{{data.Citedby}}
+                </div>
+            </div>
+            <a style="text-align: center; font-size: 20px;" class="btn btn-danger float-end" type="button" href="{{data.Link}}" target="_blank"> Go to site </a>
+        </div>
+    </div>
+    
+    <div class="container-fluid bg-dark text-white p-2">
+        <div class="d-grid gap-2">
+          <b style="font-size: 25px;">Recommendation for same group: </b><br> 
+            {% if current_user.is_authenticated %}
+            {% for i in [0,1,2,3,4]%}
+                <a style="text-align: left;" class="btn btn-light" type="button" href={{ url_for('onclick.page', id=datas[i].id)}} > 
+                <b style="font-size: 25px;">{{datas[i].Title}}</b><br>
+                <b class="text-primary">{{datas[i].Authors}}</b><br>
+                <b>Publication Year: </b>{{datas[i].Year}} , <b>institution: </b>{{datas[i].institution}}<br>
+                <b>AuthorKeywords: </b>{{datas[i].AuthorKeywords}}
+                </a>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+
+{% block content%}
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+
+<div class="container-fluid p-2">
+    <div class="d-grid gap-2">
+
+        {% if not current_user.is_authenticated %}
+        {% for data in datas.items%}
+        <a id="bgpro_notauthen" style="text-align: left;" class="btn btn-light" type="button" > 
+        <b style="font-size: 25px;">{{data.Title}}</b><br>
+        <b class="text-primary">
+            {% if data.Authors|rejectattr(', ', 'none')|list|length > 100%}
+            {{data.Authors[0:100]}} ...</b><br>
+            {% else %}
+            {{data.Authors}}</b><br>
+            {% endif %}
+        <b>Publication Year: </b>{{data.Year}} , <b>institution: </b>{{data.institution}}<br>
+        <b>AuthorKeywords: </b>{{data.AuthorKeywords}}
+        </a>
+        {% endfor %}
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+        {% for data in datas.items%}       
+        <a style="text-align: left;" class="btn btn-light" type="button" href={{ url_for('onclick.page', id=data.id)}} > 
+        <b style="font-size: 25px;">{{data.Title}}</b><br>
+        <b class="text-primary">
+            {% if data.Authors|rejectattr(', ', 'none')|list|length > 100%}
+            {{data.Authors[0:100]}} ...</b><br>
+            {% else %}
+            {{data.Authors}}</b><br>
+            {% endif %}
+        <b>Publication Year: </b>{{data.Year}} , <b>institution: </b>{{data.institution}}<br>
+        <b>AuthorKeywords: </b>{{data.AuthorKeywords}}
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+  </div>
+<!-- Pagination Links-->
+<div class="float-end p-2">
+  <a href="{{ url_for('main.index', page=datas.prev_num) }}"
+     class="btn btn-outline-dark 
+     {% if datas.page == 1 %}disabled{% endif %}">
+      &laquo;
+  </a>
+<!-- Loop through the number of pages to display a link for each-->
+{% for page_num in datas.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+<!-- Check for the active page and set the link to "Active"-->
+          {% if datas.page == page_num %}
+          <a href="{{ url_for('main.index', page=page_num) }}"
+             class="btn btn-dark ">
+              {{ page_num }}
+          </a>
+          {% else %}
+          <a href="{{ url_for('main.index', page=page_num) }}"
+             class="btn btn-outline-dark ">
+              {{ page_num }}
+          </a>
+          {% endif %}
+      {% else %}
+          ...
+      {% endif %}
+  {% endfor %}
+  <a href="{{ url_for('main.index', page=datas.next_num) }}"
+     class="btn btn-outline-dark 
+     {% if datas.page == datas.pages %}disabled{% endif %}">
+      &raquo;
+  </a>
+  <p class="text-center">
+    Showing page {{ datas.page }} of {{ datas.pages }}
+   </p>
+</div>
+
+{% endblock%}
