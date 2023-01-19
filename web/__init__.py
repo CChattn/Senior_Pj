@@ -9,7 +9,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = "d0a9586ec1d02d6db97b6709d0e319d38400acab8ebe7d91f1617efb736a33c7" #คอม wachiss35
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'education123.ckzvdumoxgmv.us-east-1.rds.amazonaws.com'
 
     db.init_app(app)
     
