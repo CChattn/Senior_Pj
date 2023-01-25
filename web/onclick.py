@@ -64,11 +64,4 @@ def link():
       db.session.commit()
    else:
       return redirect(url_for('auth.login')) 
-   data = LDA_group.query.get(select_id)
-   # แสดงข้อมูลกลุ่มที่ได้จัดไว้
-   LDA_grouping = data.LDA_group_num #ได้เลขกลุ่มออกมา
-   recommended_group = LDA_group.query.filter_by(LDA_group_num=LDA_grouping).all()
-   random_rec = random.sample(recommended_group,5)
-   redirect((f"{link}"))
-
-   
+   return redirect((f"{link}"))
