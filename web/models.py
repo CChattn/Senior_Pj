@@ -1,21 +1,23 @@
 from flask_login import UserMixin
 from . import db
-
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     
 class User_interaction(db.Model):
+    __tablename__ = 'User_interaction'
     id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
-    email = db.Column(db.String(100), unique=True)
+    email = db.Column(db.String(100))
     article_id = db.Column(db.Integer)
     article_title = db.Column(db.Text)
     interaction_type = db.Column(db.Text)
     timestamp = db.Column(db.Text)
     
 class LDA_group(UserMixin, db.Model):
+    __tablename__ = 'LDA_group'
     id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
     Authors = db.Column(db.Text)
     Title = db.Column(db.Text)
