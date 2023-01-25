@@ -2,15 +2,17 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
-
+# create the extension
 db = SQLAlchemy()
 
 def create_app():
+    
+    # create the app
     app = Flask(__name__)
-
+    
     app.config['SECRET_KEY'] = "d0a9586ec1d02d6db97b6709d0e319d38400acab8ebe7d91f1617efb736a33c7" #คอม wachiss35
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'education123.ckzvdumoxgmv.us-east-1.rds.amazonaws.com'
-
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://edu:12345678@education123.ckzvdumoxgmv.us-east-1.rds.amazonaws.com:5432/postgres"
+    
     db.init_app(app)
     
     login_manager = LoginManager()
@@ -20,6 +22,7 @@ def create_app():
     login_manager_ggauth = LoginManager()
     login_manager_ggauth.login_view = 'auth.callback'
     login_manager_ggauth.init_app(app)
+
 
     from .models import User
     
@@ -46,4 +49,3 @@ def create_app():
     from .onclick import onclick as onclick_blueprint
     app.register_blueprint(onclick_blueprint)
     return app
-
