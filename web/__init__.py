@@ -49,3 +49,4 @@ def create_app():
     from .onclick import onclick as onclick_blueprint
     app.register_blueprint(onclick_blueprint)
     return app
+
