@@ -21,57 +21,24 @@ def login():
 
 def login_post():
     email = request.form.get('email')
-    password = request.form.get('password')
+    
     remember = True if request.form.get('remember') else False
     
     user = User.query.filter_by(email=email).first()
     
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')   
-        return redirect(url_for('auth.login'))
+    if not user:
+        new_user = User(email=email) #กำหนดว่าให้สิ่งที่กรอกในฟอร์ม = อะไรใน database   
+        #เพิ่มลงใน database
+        db.session.add(new_user)
+        db.session.commit()
+        
+        check_email = User.query.filter_by(email=email).first()
+        login_user(check_email)
+        return redirect(url_for('main.index'))
     
     login_user(user, remember=remember)
     return redirect(url_for('main.index')) #ไปไหนดี
 
-@auth.route('/signup')
-def signup():
-    return render_template("signup.html")
-
-@auth.route('/signup', methods=['POST'])
-def signup_post():
-    #add ไป database
-    
-    if request.method == 'POST':       
-        email = request.form.get('email')
-        name = request.form.get('name')
-        password = request.form.get('password')
-        repeat_password = request.form.get('repeat_password')
-        
-        check_email = User.query.filter_by(email=email).first() #ตรวจสอบว่ามี email บน database รึยัง
-        
-        if not email:
-            flash('Please fill all fields')   
-        elif not name:
-            flash('Please fill all fields')
-        elif not password:
-            flash('Please fill all fields')
-        elif not repeat_password:
-            flash('Please fill all fields')   
-        elif check_email:
-            flash('Email address already exists')   
-        elif password != repeat_password:
-            flash('password does not match')
-    
-        else:  
-            new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256')) #กำหนดว่าให้สิ่งที่กรอกในฟอร์ม = อะไรใน database
-            
-            #เพิ่มลงใน database
-            db.session.add(new_user)
-            db.session.commit()
-        
-            return redirect(url_for('auth.login'))
-        
-    return redirect(url_for('auth.signup'))
 
 #ggauth part
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" 
@@ -119,12 +86,10 @@ def callback():
     )
 
     session["google_id"] = id_info.get("sub")  #defing the results to show on the page
-    session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     
     #check for login
     ggemail = session["email"]
-    ggname = session["name"]
     ggpassword = "-"
     ggcheck_email = User.query.filter_by(email=ggemail).first()
     
@@ -132,7 +97,7 @@ def callback():
         login_user(ggcheck_email)
         redirect(url_for('main.index'))    
     else:
-        ggnew_user = User(email=ggemail, name=ggname, password=ggpassword) #กำหนดว่าให้สิ่งที่กรอกในฟอร์ม = อะไรใน database
+        ggnew_user = User(email=ggemail, password=ggpassword) #กำหนดว่าให้สิ่งที่กรอกในฟอร์ม = อะไรใน database
 
         #เพิ่มลงใน database
         db.session.add(ggnew_user)

@@ -65,3 +65,5 @@ def link():
    else:
       return redirect(url_for('auth.login')) 
    return redirect((f"{link}"))
+
+   

@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+
 
 # create the extension
 db = SQLAlchemy()
@@ -22,7 +25,9 @@ def create_app():
     login_manager_ggauth = LoginManager()
     login_manager_ggauth.login_view = 'auth.callback'
     login_manager_ggauth.init_app(app)
-
+    
+    app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
     from .models import User
     

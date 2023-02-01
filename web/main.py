@@ -4,6 +4,7 @@ from flask import request
 from . import db
 from .models import LDA_group
 
+
 main = Blueprint('main', __name__,static_folder='static')
 
 
@@ -25,14 +26,14 @@ def index():
     # ดึงข้อมูลจาก database (ต้องไปเพิ่มข้อมูล csv ใส่ database ก่อนนะ)
     scopus = total_filtered.query.paginate(page=page, per_page=ROWS_PER_PAGE)
     if current_user.is_authenticated:
-        return render_template("index.html",datas=scopus, name=current_user.name)
+        return render_template("index.html",datas=scopus, name=current_user.email)
     else:
         return render_template("index.html",datas=scopus)
 
 @main.route('/profile') #กำหนดว่าถ้า path นี้จะเป็นอะไร(กำหนดเส้นทาง)
 @login_required #ต้อง login ก่อน ถึงจะให้เข้า
 def profile():
-    return render_template("profile.html", name=current_user.name)
+    return render_template("profile.html", name=current_user.email)
 
 
 # dynamic route คือ url จะเปลี่ยนไปตามค่าที่เราส่งไป
